@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+    
+    <head>
+        <meta charset="UTF-8">
+        <title>欢迎页面-X-admin2.2</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <link rel="stylesheet" href="./css/font.css">
+        <link rel="stylesheet" href="./css/xadmin.css">
+        <script type="text/javascript" src="/webjars/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="./js/xadmin.js"></script>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+            <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+            <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+    <div class="layui-fluid">
+		<div class="layui-row">
+    		<div class="layui-btn-group">
+				<button type="button" class="layui-btn layui-btn-sm" id="clearTable">
+				  <i class="layui-icon">&#xe640;</i>
+				</button>
+				<button type="button" class="layui-btn layui-btn-sm" id="deleteLastLine">
+				  <i class="layui-icon">&#x1006;</i>
+				</button>
+				<button type="button" class="layui-btn layui-btn-sm" id="addTable">
+				  <i class="layui-icon">&#xe654;</i>
+				</button>
+			 </div>
+			 <div id="tips">
+			 	<table class="layui-hide" id="baseInfo" lay-filter="baseInfo"></table>
+			 </div>
+			 <button type="button" class="layui-btn" style="display:block;margin:0 auto" id="submitBtn">批量创建用户</button>
+            </div>
+        </div>
+        <script th:inline="none">
+        layui.use(['layer', 'table'],
+            function() {
+        	    var $ = layui.jquery,
+	                table = layui.table,
+	                layer = layui.layer;
+				
+        	    var tableData = new Array();
+        		
+        		tableData[0] = {name: "", email: "", mobile: "", roleTypeList: ""};
+        		table.render({
+        			elem: '#baseInfo'
+        			     ,data:tableData
+        			     ,cols: [[
+        			        {field:'name', title:'登录名', edit: 'text'}
+        			        ,{field:'email', title:'邮箱', edit: 'text'}
+        			        ,{field:'mobile', title:'手机号', edit: 'text'}
+        			        ,{field:'roleTypeList', title:'角色', edit: 'text'}
+        			      ]]
+		       	     ,page: false
+		    	     , done: function(res, curr, count){
+		    	     }
+        		});
+        		
+        		$("#addTable").click(function(){
+        			$('#submitBtn').removeAttr("disabled");
+        			var oldData = table.cache["baseInfo"];
+        			var tempRoleTypeList = oldData[oldData.length-1].roleTypeList;
+        			var tempData = {name: "", email: "", mobile: "", roleTypeList: tempRoleTypeList};
+        			tableData.push(tempData);
+        			oldData.push(tempData);
+        			table.reload('baseInfo',{
+        				data : oldData
+        			});
+        		});
+        	    
+        		$("#deleteLastLine").click(function(){		
+        			var oldData = table.cache["baseInfo"];
+        			delete oldData[oldData.length-1];
+        			
+        			if(oldData.length == 1) {
+        				var tempData = {name: "", email: "", mobile: "", roleTypeList: ""};
+        			 	oldData[0] = tempData;
+        				table.reload('baseInfo',{
+        					data : oldData
+        				});
+        			 	return;
+        			}
+        			
+        			table.reload('baseInfo',{
+        				data : oldData
+        			});
+        		});
+        		
+        		$("#clearTable").click(function(){
+        			var oldData = table.cache["baseInfo"];
+        			for(i =0; i< oldData.length; i++) {
+        				delete oldData[i];
+        			}
+        			var tempData = {name: "", email: "", mobile: "", roleTypeList: ""};
+        		 	oldData[0] = tempData;
+        			table.reload('baseInfo',{
+        				data : oldData
+        			});
+        		});
+        	    
+        	    $("#submitBtn").click(function(){
+        	    	var brachData = table.cache["baseInfo"];
+        	    	
+        	    	var requestData = new Array();
+        	    	for (i = 0; i < brachData.length; i++) {
+        	    		
+        	    		if(isEmpty(brachData[i].name)
+        	    			|| isEmpty(brachData[i].email)
+        	    			|| isEmpty(brachData[i].mobile)
+        	    			|| isEmpty(brachData[i].roleTypeList)) {
+        	    			layer.alert('数据列表不允许存在空值！', {icon: 5});
+        	    			return;
+        	    		}
+        	    		requestData[i] = {
+        	    				'name':brachData[i].name,
+        	    				'email':brachData[i].email,
+        	    				'mobile':brachData[i].mobile,
+        	    				'roleTypeList':brachData[i].roleTypeList
+        	    				}
+        	    	}
+        	    	
+        	    	$.ajax({
+        		         url: '/user/batchCreate',
+        		         type: 'post',
+        		         dataType:'json',
+        		         contentType:"application/json",
+        		         async:true,
+        		         cache:false,
+        		         data:JSON.stringify({'batch' : requestData}),
+        		         
+        		         success:function(res) {
+        						console.log(res.data);
+        						var tableHtml = '<div style="padding:10px;">';
+        						tableHtml += '<div class="layui-form">';
+        						tableHtml += '<table class="layui-table" lay-skin="row">';
+        						tableHtml += '<thead>';
+        						tableHtml += '<tr>';
+        						tableHtml += '<th>姓名</th>';
+        						tableHtml += '<th>邮箱</th>';
+        						tableHtml += '<th>手机号</th>';
+        						tableHtml += '<th>角色</th>';
+        						tableHtml += '<th>用户帐号</th>';
+        						tableHtml += '<th>失败原因</th>';
+        						tableHtml += '</tr>';
+        						tableHtml += '</thead>';
+        		             for(i=0; i<res.data.length; i++) {
+        		            	 console.log(res.data[i]);
+        		            	 console.log(res.data[i].name);
+        		            	 var tempTr = '<tr>';
+        		            	 tempTr += '<td>' + res.data[i].name + '</td>';
+        		            	 tempTr += '<td>' + res.data[i].email + '</td>';
+        		            	 tempTr += '<td>' + res.data[i].mobile + '</td>';
+        		            	 tempTr += '<td>' + res.data[i].roleTypeList + '</td>';
+        		            	 tempTr += '<td>' + res.data[i].userId + '</td>';
+        		            	 tempTr += '<td>' + res.data[i].errorMsg + '</td>';
+        		            	 tempTr += '</tr>';
+        		            	 
+        		            	 tableHtml += tempTr;
+        		             }
+        		             tableHtml += '</table></div>';
+        		             tableHtml += '<div>';
+        		             
+        		             layer.open({
+        		            	  type: 1,
+        		            	  area: ['100%', '100%'],
+        		             	  shade: 0.6, //遮罩透明度
+        		            	  title: false,
+        		            	  fixed: true,
+        		            	  closeBtn: 0,
+        		            	  maxmin: false,
+        		            	  resize: false,
+        		            	  shadeClose: true,
+        		            	  anim: 0,
+        		            	  content: tableHtml
+        		             });
+        		         },
+        		         error:function(data) {
+        		         }
+        	   		});
+        	    });
+        	    
+            });
+        
+        
+        function isEmpty(obj) {
+            if(typeof obj == "undefined" || obj == null || obj == ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        </script>
+    </body>
+
+</html>
