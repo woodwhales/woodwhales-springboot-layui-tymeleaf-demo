@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.2</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<link rel="stylesheet" href="/xadmin/css/font.css">
+<link rel="stylesheet" href="/xadmin/css/xadmin.css">
+<script type="text/javascript" src="/webjars/layui/layui.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="/xadmin/js/xadmin.js"></script>
+<script type="text/javascript" src="/xadmin/js/xm-select.js"></script>
+</head>
+<body>
+<div class="layui-fluid">
+	<div class="layui-row">
+		<div class="layui-input-inline">
+		<input type="text" class="layui-input" id="parentId" value="10006,10008,10011">
+		</div>
+		<button type="submit" class="layui-btn" lay-submit="" id="addUserInfoBtn">添加数据</button>
+	</div>
+</div>
+<script th:inline="none">
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form
+  ,$ = layui.$
+  ,layer = layui.layer;
+  
+  $('#addUserInfoBtn').on('click', function(){
+	  
+	  // 获取当前页面中元素的数据
+	  var pidVal = $('#parentId').val();
+	  
+	  layer.open({
+	  type: 2,
+	  title: '子页面-添加用户信息',
+	  shadeClose: true,
+	  shade: 0.8,
+	  area: ['90%', '90%'],
+	  content: '/userAdd', //iframe的url
+	  success: function(layero, index) {
+		  
+		  // 弹窗加载完毕之后调用的函数，将数据设置到子页面中
+		  var body = layer.getChildFrame('body', index);
+		  var iframeWin = window[layero.find('iframe')[0]['name']];
+		  var inputList = body.find('#childId');
+		  $(inputList).val(pidVal);
+	  }
+	}); 
+  });
+  
+});
+
+// 刷新父页面中的文本框
+function refesh(value) {
+	console.log('refesh', value);
+	$('#parentId').val(value);
+}
+
+var getParentId = function() {
+	return $('#parentId').val();
+}
+
+
+</script>
+
+</body>
+</html>

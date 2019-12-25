@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.2</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<link rel="stylesheet" href="/xadmin/css/font.css">
+<link rel="stylesheet" href="/xadmin/css/xadmin.css">
+<script type="text/javascript" src="/webjars/layui/layui.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="/xadmin/js/xadmin.js"></script>
+<script type="text/javascript" src="/xadmin/js/xm-select.js"></script>
+</head>
+<body>
+<div class="layui-fluid">
+	<div class="layui-row">
+		<div class="layui-input-inline">
+			<input type="text" id="childId" class="layui-input">
+		</div>
+		<button type="submit" class="layui-btn layui-btn-sm" id="submitBtn">确认添加</button>
+		<button type="submit" class="layui-btn layui-btn-sm" id="exportBtn">导出成excel</button>
+		<table class="layui-hide" id="tableInfo"></table>
+	</div>
+</div>
+<script th:inline="none">
+layui.use(['form', 'table'], function(){
+  var form = layui.form
+  ,$ = layui.$
+  ,table = layui.table
+  ,layer = layui.layer;
+  
+  var data = new Array();
+  
+  data = [
+      {
+          "id": 10000,
+          "username": "user-0",
+          "sex": "女",
+          "city": "城市-0",
+          "sign": "签名-0",
+          "experience": 255,
+          "logins": 24,
+          "wealth": 82830700,
+          "classify": "作家",
+          "score": 57
+      },
+      {
+          "id": 10001,
+          "username": "user-1",
+          "sex": "男",
+          "city": "城市-1",
+          "sign": "签名-1",
+          "experience": 884,
+          "logins": 58,
+          "wealth": 64928690,
+          "classify": "词人",
+          "score": 27
+      },
+      {
+          "id": 10002,
+          "username": "user-2",
+          "sex": "女",
+          "city": "城市-2",
+          "sign": "签名-2",
+          "experience": 650,
+          "logins": 77,
+          "wealth": 6298078,
+          "classify": "酱油",
+          "score": 31
+      },
+      {
+          "id": 10003,
+          "username": "user-3",
+          "sex": "女",
+          "city": "城市-3",
+          "sign": "签名-3",
+          "experience": 362,
+          "logins": 157,
+          "wealth": 37117017,
+          "classify": "诗人",
+          "score": 68
+      },
+      {
+          "id": 10004,
+          "username": "user-4",
+          "sex": "男",
+          "city": "城市-4",
+          "sign": "签名-4",
+          "experience": 807,
+          "logins": 51,
+          "wealth": 76263262,
+          "classify": "作家",
+          "score": 6
+      },
+      {
+          "id": 10005,
+          "username": "user-5",
+          "sex": "女",
+          "city": "城市-5",
+          "sign": "签名-5",
+          "experience": 173,
+          "logins": 68,
+          "wealth": 60344147,
+          "classify": "作家",
+          "score": 87
+      },
+      {
+          "id": 10006,
+          "username": "user-6",
+          "sex": "女",
+          "city": "城市-6",
+          "sign": "签名-6",
+          "experience": 982,
+          "logins": 37,
+          "wealth": 57768166,
+          "classify": "作家",
+          "score": 34
+      },
+      {
+          "id": 10007,
+          "username": "user-7",
+          "sex": "男",
+          "city": "城市-7",
+          "sign": "签名-7",
+          "experience": 727,
+          "logins": 150,
+          "wealth": 82030578,
+          "classify": "作家",
+          "score": 28
+      },
+      {
+          "id": 10008,
+          "username": "user-8",
+          "sex": "男",
+          "city": "城市-8",
+          "sign": "签名-8",
+          "experience": 951,
+          "logins": 133,
+          "wealth": 16503371,
+          "classify": "词人",
+          "score": 14
+      },
+      {
+          "id": 10009,
+          "username": "user-9",
+          "sex": "女",
+          "city": "城市-9",
+          "sign": "签名-9",
+          "experience": 484,
+          "logins": 25,
+          "wealth": 86801934,
+          "classify": "词人",
+          "score": 75
+      },
+      {
+          "id": 10010,
+          "username": "user-10",
+          "sex": "女",
+          "city": "城市-10",
+          "sign": "签名-10",
+          "experience": 1016,
+          "logins": 182,
+          "wealth": 71294671,
+          "classify": "诗人",
+          "score": 34
+      },
+      {
+          "id": 10011,
+          "username": "user-11",
+          "sex": "女",
+          "city": "城市-11",
+          "sign": "签名-11",
+          "experience": 492,
+          "logins": 107,
+          "wealth": 8062783,
+          "classify": "诗人",
+          "score": 6
+      },
+      {
+          "id": 10012,
+          "username": "user-12",
+          "sex": "女",
+          "city": "城市-12",
+          "sign": "签名-12",
+          "experience": 106,
+          "logins": 176,
+          "wealth": 42622704,
+          "classify": "词人",
+          "score": 54
+      },
+      {
+          "id": 10013,
+          "username": "user-13",
+          "sex": "男",
+          "city": "城市-13",
+          "sign": "签名-13",
+          "experience": 1047,
+          "logins": 94,
+          "wealth": 59508583,
+          "classify": "诗人",
+          "score": 63
+      },
+      {
+          "id": 10014,
+          "username": "user-14",
+          "sex": "男",
+          "city": "城市-14",
+          "sign": "签名-14",
+          "experience": 873,
+          "logins": 116,
+          "wealth": 72549912,
+          "classify": "词人",
+          "score": 8
+      },
+      {
+          "id": 10015,
+          "username": "user-15",
+          "sex": "女",
+          "city": "城市-15",
+          "sign": "签名-15",
+          "experience": 1068,
+          "logins": 27,
+          "wealth": 52737025,
+          "classify": "作家",
+          "score": 28
+      },
+      {
+          "id": 10016,
+          "username": "user-16",
+          "sex": "女",
+          "city": "城市-16",
+          "sign": "签名-16",
+          "experience": 862,
+          "logins": 168,
+          "wealth": 37069775,
+          "classify": "酱油",
+          "score": 86
+      },
+      {
+          "id": 10017,
+          "username": "user-17",
+          "sex": "女",
+          "city": "城市-17",
+          "sign": "签名-17",
+          "experience": 1060,
+          "logins": 187,
+          "wealth": 66099525,
+          "classify": "作家",
+          "score": 69
+      },
+      {
+          "id": 10018,
+          "username": "user-18",
+          "sex": "女",
+          "city": "城市-18",
+          "sign": "签名-18",
+          "experience": 866,
+          "logins": 88,
+          "wealth": 81722326,
+          "classify": "词人",
+          "score": 74
+      },
+      {
+          "id": 10019,
+          "username": "user-19",
+          "sex": "女",
+          "city": "城市-19",
+          "sign": "签名-19",
+          "experience": 682,
+          "logins": 106,
+          "wealth": 68647362,
+          "classify": "词人",
+          "score": 51
+      }
+  ];
+  
+  var idList = new Array;
+  $(function() {
+	  // 调用父页面中函数获取父页面中的数据
+	  var userIdList = parent.getParentId().split(',');
+	  for(i=0;i<userIdList.length;i++) {
+		  idList[i] = userIdList[i]; 
+	  }
+  });
+  
+  var checkedData = new Array();
+  
+  for(i = 0; i < data.length; i++) {
+	  
+	  for(j=0 ; j<idList.length; j++) {
+		  if(data[i].id == idList[j]) {
+			  data[i].LAY_CHECKED = true
+			  break;
+		  }
+	  }
+	  
+  }
+  
+  var exportData = " ";
+  
+  var tableInfo = table.render({
+	    elem: '#tableInfo'
+	    ,data: data
+	    ,cols: [[
+	       {type:'checkbox'}
+	      ,{field:'id', width:80, title: 'ID', sort: true}
+	      ,{field:'username', width:80, title: '用户名'}
+	      ,{field:'sex', width:80, title: '性别', sort: true}
+	      ,{field:'city', width:80, title: '城市'}
+	      ,{field:'sign', title: '签名', width: '30%', minWidth: 100} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
+	      ,{field:'experience', title: '积分', sort: true}
+	      ,{field:'score', title: '评分', sort: true}
+	      ,{field:'classify', title: '职业'}
+	      ,{field:'wealth', width:137, title: '财富', sort: true}
+	      ]]
+  		,page: true
+  		,done: function(res, curr, count) {
+  			exportData=res.data;
+  		}
+	  });
+  
+  $('#submitBtn').on('click', function(){
+	  
+	  var id = $('#childId').val();
+	  
+	  // 获取选中的数据
+	  var checkStatus = table.checkStatus('tableInfo')
+      ,data = checkStatus.data;
+	  console.log(JSON.stringify(data));
+	  
+	  var ids = new Array();
+	  for(i=0; i<data.length; i++) {
+		  ids[i] = data[i].id;
+	  }
+	  
+	  parent.refesh(ids.join(','));
+	  var index = parent.layer.getFrameIndex(window.name);
+	  parent.layer.close(index);
+      
+  });
+  
+  // 也可参考 ： 扩展 layui 的导出插件 layui.excel [ https://fly.layui.com/extend/excel/ ]
+  $("#exportBtn").click(function(){
+     table.exportFile(tableInfo.config.id, exportData, 'xls');
+  })
+  
+});
+
+</script>
+
+</body>
+</html>
