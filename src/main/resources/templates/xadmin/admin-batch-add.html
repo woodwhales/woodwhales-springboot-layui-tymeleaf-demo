@@ -49,6 +49,7 @@
         		table.render({
         			elem: '#baseInfo'
         			     ,data:tableData
+        			     ,limit: 1000 // 设置表格当前页缓存的最大数量，超过这个数量的数据不能再通过点击按钮添加数据了
         			     ,cols: [[
         			        {field:'name', title:'登录名', edit: 'text'}
         			        ,{field:'email', title:'邮箱', edit: 'text'}

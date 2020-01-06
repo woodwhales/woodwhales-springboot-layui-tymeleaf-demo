@@ -253,6 +253,8 @@ $.ajax({
 
 ![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/01.gif)
 
+> 这里有个 BUG，layui 的静态表格默认10条数据分一页，因此默认最多添加11条数据，如果想要可添加多一些数据，那么手动设置每页数据大小：`limit: 1000`，参见：https://www.layui.com/doc/modules/table.html#options
+
 由于批量操作基本上是对“同一类”用户进行批量创建，因此他们的同一类是角色，因此点击“+”按钮的时候，新增的行会取前一行的角色的值。
 
 批量提交之后，后台会将本批次提交的结果再响应回来，创建成功的记录有“userId”，创建失败的有失败原因提示。
@@ -479,5 +481,21 @@ $(function(){
 - 角色类型数据字典：`org.woodwhales.layui.controller.RoleRTypeController.listAll()`
 
 - 用户详情：`org.woodwhales.layui.controller.UserController.queryUserById(String)`
+
+### 表格多选翻页选择记忆功能
+
+本示例运行效果：
+
+![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/15.png)
+
+![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/16.png)
+
+html 页面位置：
+
+父页面：`/springboot-layui-tymeleaf-demo/src/main/resources/templates/xadmin/role-add.html`
+
+子页面：`/springboot-layui-tymeleaf-demo/src/main/resources/templates/role-user-manager.html`
+
+后台数据响应文件位置：`org.woodwhales.layui.controller.UserController.listAllByPage(PageInputDTO)`
 
 源码 github  地址：[springboot-layui-tymeleaf-demo](https://github.com/woodwhales/springboot-layui-tymeleaf-demo.git)

@@ -1,8 +1,6 @@
 package org.woodwhales.layui.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.google.common.collect.Lists;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,12 +10,14 @@ import org.woodwhales.layui.commons.RespResut;
 import org.woodwhales.layui.controller.vo.RoleTypeVO;
 import org.woodwhales.layui.model.RoleType;
 
-import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/roleType")
-public class RoleRTypeController {
-private static List<RoleType> RoleTypeList = Lists.newArrayList();
+public class RoleTypeController {
+	
+	private static List<RoleType> RoleTypeList = Lists.newArrayList();
 	
 	static {
 		RoleTypeList.add(new RoleType("01", "普通管理员"));

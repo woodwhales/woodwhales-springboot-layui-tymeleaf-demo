@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./css/font.css">
     <link rel="stylesheet" href="./css/xadmin.css">
     <script type="text/javascript" src="/webjars/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/webjars/jquery/jquery.js"></script>
     <script type="text/javascript" src="./js/xadmin.js"></script>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
@@ -31,9 +32,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label">
-                        拥有权限
-                    </label>
+                    <label class="layui-form-label">拥有权限</label>
                     <table  class="layui-table layui-input-block">
                         <tbody>
                             <tr>
@@ -42,21 +41,20 @@
                                 </td>
                                 <td>
                                     <div class="layui-input-block">
-                                        <input name="id[]" lay-skin="primary" type="checkbox" title="用户停用" value="2"> 
-                                        <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户删除"> 
+                                        <input name="id[]" lay-skin="primary" type="checkbox" title="用户停用" value="0"> 
+                                        <input name="id[]" lay-skin="primary" type="checkbox" value="1" title="用户删除"> 
                                         <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户修改"> 
-                                        <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户改密"> 
-                                        <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户列表">
-                                        <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户改密"> 
-                                        <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户列表">
-                                        <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户改密"> 
-                                        <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="用户列表"> 
+                                        <input name="id[]" lay-skin="primary" type="checkbox" value="3" title="用户改密"> 
+                                        <input name="id[]" lay-skin="primary" type="checkbox" value="4" title="用户列表">
+                                        <input name="id[]" lay-skin="primary" type="checkbox" value="5" title="用户改密"> 
+                                        <input name="id[]" lay-skin="primary" type="checkbox" value="6" title="用户列表">
+                                        <input name="id[]" lay-skin="primary" type="checkbox" value="7" title="用户改密"> 
+                                        <input name="id[]" lay-skin="primary" type="checkbox" value="8" title="用户列表"> 
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                   
                                     <input name="id[]" lay-skin="primary" type="checkbox" value="2" title="文章管理" lay-filter="father">
                                 </td>
                                 <td>
@@ -72,32 +70,41 @@
                         </tbody>
                     </table>
                 </div>
+                
                 <div class="layui-form-item layui-form-text">
-                    <label for="desc" class="layui-form-label">
-                        描述
-                    </label>
+                    <label for="desc" class="layui-form-label">描述</label>
                     <div class="layui-input-block">
                         <textarea placeholder="请输入内容" id="desc" name="desc" class="layui-textarea"></textarea>
                     </div>
                 </div>
+                
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户列表</label>
+                    <div id="userList"></div>
+                    <input type="hidden" id="userNameList">
+                    <input type="hidden" name="userCodeList" id="userCodeList">
+                    <a class="layui-btn layui-btn-sm layui-bg-orange" id="addUserName">添加管理员</a>
+                </div>
+                
                 <div class="layui-form-item">
                 <button class="layui-btn" lay-submit="" lay-filter="add">增加</button>
               </div>
+              
             </form>
         </div>
     </div>
     <script>
         layui.use(['form','layer'], function(){
-            $ = layui.jquery;
-          var form = layui.form
-          ,layer = layui.layer;
-        
-          //自定义验证规则
-          form.verify({
+            var form = layui.form
+            ,layer = layui.layer
+            ,$ = layui.jquery;
+
+            //自定义验证规则
+            form.verify({
             nikename: function(value){
-              if(value.length < 5){
-                return '昵称至少得5个字符啊';
-              }
+                if(value.length < 5){
+                    return '昵称至少得5个字符啊';
+                }
             }
             ,pass: [/(.+){6,12}$/, '密码必须6到12位']
             ,repass: function(value){
@@ -105,35 +112,84 @@
                     return '两次密码不一致';
                 }
             }
-          });
-
-          //监听提交
-          form.on('submit(add)', function(data){
-            console.log(data);
-            //发异步，把数据提交给php
-            layer.alert("增加成功", {icon: 6},function () {
-                // 获得frame索引
-                var index = parent.layer.getFrameIndex(window.name);
-                //关闭当前frame
-                parent.layer.close(index);
             });
-            return false;
-          });
 
+            $('#addUserName').click(function() {
+            layer.open({
+                type: 2,
+                title: '用户列表',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['90%', '90%'],
+                content: '/role/addUser'
+              });
+            });
 
-        form.on('checkbox(father)', function(data){
+            //监听提交
+            form.on('submit(add)', function(data){
+                console.log(data);
+                //发异步，把数据提交给php
+                layer.alert("增加成功", {icon: 6},function () {
+                    // 获得frame索引
+                    var index = parent.layer.getFrameIndex(window.name);
+                    //关闭当前frame
+                    parent.layer.close(index);
+                });
+                return false;
+            });
 
-            if(data.elem.checked){
-                $(data.elem).parent().siblings('td').find('input').prop("checked", true);
-                form.render(); 
-            }else{
-               $(data.elem).parent().siblings('td').find('input').prop("checked", false);
-                form.render();  
-            }
+            form.on('checkbox(father)', function(data){
+
+                if(data.elem.checked){
+                    $(data.elem).parent().siblings('td').find('input').prop("checked", true);
+                    form.render();
+                }else{
+                   $(data.elem).parent().siblings('td').find('input').prop("checked", false);
+                    form.render();
+                }
+            });
+
+            $(document).on('click', '.del-class', function() {
+                var userCode = ''+$(this).data('usercode'); // 获取到值为数字型，和字符串数组元素类型不匹配，所以要转成字符串
+
+                var userCodeList = getUserCodeList().split(',');
+                var index = $.inArray(userCode, userCodeList);
+
+                console.log('userCode', userCode);
+                console.log('index', index);
+                console.log('userCodeList', userCodeList);
+
+                if(index!=-1){
+                    userCodeList.splice(index, 1);
+                }
+
+                $("#userCodeList").val(userCodeList.join(','));
+
+                $(this).parent().remove();
+            });
+
         });
-          
-          
-        });
+
+        function getUserCodeList() {
+            return $('#userCodeList').val();
+        }
+
+        function getUserNameList() {
+            return $('#userNameList').val();
+        }
+
+        function setUserCodeList(userCodeList, userNameList) {
+            $("#userCodeList").val(userCodeList.join(','));
+            $('#userNameList').val(userNameList.join(','));
+            
+            var userNameListStr = '';
+            $.each(userNameList, function(index, userName) {
+                userNameListStr += '<span>';
+                userNameListStr += userName + '<a href="javascrip:;" class="del-class" data-usercode='+userCodeList[index]+'><b><i class="layui-icon layui-icon-close" style="font-size: 15px; color:red;"></i></b></a>&nbsp;&nbsp;&nbsp;';
+                userNameListStr += '</span>';
+            });
+            $("#userList").html(userNameListStr);
+        }
     </script>
   </body>
 

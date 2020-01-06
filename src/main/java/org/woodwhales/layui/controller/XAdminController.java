@@ -11,16 +11,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/xadmin")
 public class XAdminController {
 
-	@GetMapping({"/index.html", "/"})
+	@GetMapping({"/index.html", "/", ""})
 	public String index(HttpServletRequest request, HttpServletResponse response) {
 		return "xadmin/index";
 	}
 	
+	/**
+	 *  后台欢迎页
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@GetMapping("welcome.html")
 	public String welcome(HttpServletRequest request, HttpServletResponse response) {
 		return "xadmin/welcome";
 	}
 	
+	/** 
+	 * 统计页面
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@GetMapping("welcome1.html")
 	public String welcome1(HttpServletRequest request, HttpServletResponse response) {
 		return "xadmin/welcome1";
@@ -36,11 +48,22 @@ public class XAdminController {
 		return "xadmin/admin-edit";
 	}
 	
+	/**
+	 *  管理员列表
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@GetMapping("admin-list.html")
 	public String adminList(HttpServletRequest request, HttpServletResponse response) {
 		return "xadmin/admin-list";
 	}
 
+	/** 角色管理
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@GetMapping("admin-role.html")
 	public String adminRole(HttpServletRequest request, HttpServletResponse response) {
 		return "xadmin/admin-role";
@@ -55,4 +78,28 @@ public class XAdminController {
 	public String roleBatchAdd(HttpServletRequest request, HttpServletResponse response) {
 		return "xadmin/admin-batch-add";
 	}
+	
+	/**
+	 * 权限分类
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@GetMapping("admin-cate.html")
+	public String adminCate(HttpServletRequest request, HttpServletResponse response) {
+		return "xadmin/admin-cate";
+	}
+	
+	/**
+	 * 权限管理
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@GetMapping("admin-rule.html")
+	public String adminRule(HttpServletRequest request, HttpServletResponse response) {
+		return "xadmin/admin-rule";
+	}
+	
+	
 }
