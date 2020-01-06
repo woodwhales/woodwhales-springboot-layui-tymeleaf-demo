@@ -34,7 +34,7 @@ spring:
 
 注意如果一个 controller 需要映射页面，那么不要使用 @RestController 注解，而是使用 @Controller 注解，参见下图示例：
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/02.png)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/02.png)
 
 #### html 标签注意事项
 
@@ -102,7 +102,7 @@ thymeleaf 将 js 代码中的二维数组，当做了自己的标签，进行解
 
   形如：
 
-  ![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/01.png)
+  ![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/01.png)
 
 ### x-admin 配置
 
@@ -143,7 +143,7 @@ thymeleaf 将 js 代码中的二维数组，当做了自己的标签，进行解
 
 注意：这里不需要拷贝 lib 目录了，因为上文已经引入了 layui 的 jar 包了
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/04.png)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/04.png)
 
 #### 页面映射路径注意事项
 
@@ -198,15 +198,15 @@ x-admin 模板对静态文件引用使用的是相对路径，因此需要更改
 
 本示例运行效果：
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/05.png)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/05.png)
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/06.png)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/06.png)
 
 html 页面位置：`src/main/resources/templates/xadmin/admin-add.html`
 
 在城市字段位置增加了下拉多选框：
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/07.png)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/07.png)
 
 注意在页面中引入 xm-select 插件脚本：
 
@@ -214,7 +214,7 @@ html 页面位置：`src/main/resources/templates/xadmin/admin-add.html`
 <script type="text/javascript" src="./js/xm-select.js"></script>
 ```
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/11.png)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/11.png)
 
 js 脚本渲染：
 
@@ -245,13 +245,13 @@ $.ajax({
 
 本示例运行效果：
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/08.png)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/08.png)
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/09.png)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/09.png)
 
 动态效果图：
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/01.gif)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/01.gif)
 
 > 这里有个 BUG，layui 的静态表格默认10条数据分一页，因此默认最多添加11条数据，如果想要可添加多一些数据，那么手动设置每页数据大小：`limit: 1000`，参见：https://www.layui.com/doc/modules/table.html#options
 
@@ -263,7 +263,7 @@ html 页面位置：`src/main/resources/templates/xadmin/admin-batch-add.html`
 
 在页面中定义一个表格 div：
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/10.png)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/10.png)
 
 js 脚本控制：
 
@@ -411,15 +411,15 @@ function isEmpty(obj) {
 
 本示例运行效果：
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/12.png)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/12.png)
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/13.png)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/13.png)
 
 html 页面位置：`/springboot-layui-tymeleaf-demo/src/main/resources/templates/xadmin/admin-edit.html`
 
 在页面中的“角色”字段位置增加自定义的复选框 div：
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/14.png)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/14.png)
 
 js 脚本渲染：
 
@@ -486,9 +486,9 @@ $(function(){
 
 本示例运行效果：
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/15.png)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/15.png)
 
-![](https://raw.githubusercontent.com/woodwhales/springboot-layui-tymeleaf-demo/master/doc/images/16.png)
+![](https://github.com/woodwhales/springboot-layui-tymeleaf-demo/blob/master/doc/images/16.png)
 
 html 页面位置：
 
