@@ -20,7 +20,15 @@
     <body>
         <div class="layui-fluid">
             <div class="layui-row">
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>添加管理员</legend>
+                </fieldset>
                 <form class="layui-form">
+					<div class="layui-form-item">
+					    <label class="layui-form-label">
+					        <a class="layui-btn layui-btn-sm layui-btn-normal" href="./admin-list.html">返回</a>
+					    </label>
+					</div>
                   <div class="layui-form-item">
                       <label for="username" class="layui-form-label">
                           <span class="x-red">*</span>登录名
@@ -63,7 +71,7 @@
                   </div>
                   <div class="layui-form-item">
                       <label class="layui-form-label"><span class="x-red">*</span>城市</label>
-                      <div class="layui-input-block">
+                      <div class="layui-input-block" style="width:188px;">
                         <div id="cityList" class="xm-select-city"></div>
                       </div>
                   </div>
@@ -72,8 +80,7 @@
                           <span class="x-red">*</span>密码
                       </label>
                       <div class="layui-input-inline">
-                          <input type="password" id="L_pass" name="pass" required="" lay-verify="pass"
-                          autocomplete="off" class="layui-input">
+                          <input type="password" id="L_pass" name="pass" required="" lay-verify="pass" autocomplete="off" class="layui-input">
                       </div>
                       <div class="layui-form-mid layui-word-aux">
                           6到16个字符

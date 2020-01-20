@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,13 +12,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.woodwhales.layui.commons.RespResut;
 import org.woodwhales.layui.controller.vo.RoleTypeVO;
 import org.woodwhales.layui.model.RoleType;
+import org.woodwhales.layui.service.RoleService;
 
 import com.google.common.collect.Lists;
 
 @Controller
-@RequestMapping("/roleType")
-public class RoleRTypeController {
-private static List<RoleType> RoleTypeList = Lists.newArrayList();
+@RequestMapping("/role")
+public class RoleTypeController {
+	
+	@Autowired
+	private RoleService roleService;
+	
+	private static List<RoleType> RoleTypeList = Lists.newArrayList();
 	
 	static {
 		RoleTypeList.add(new RoleType("01", "普通管理员"));
@@ -33,6 +39,12 @@ private static List<RoleType> RoleTypeList = Lists.newArrayList();
 										.map(this::convertFor)
 										.collect(Collectors.toList());
 		return RespResut.success(roleTypeVOs);
+	}
+	
+	@ResponseBody
+	@GetMapping("/list")
+	public Object list() {
+		return roleService.selectRoleListByUserId(1L);
 	}
 	
 	private RoleTypeVO convertFor(RoleType roleType) {

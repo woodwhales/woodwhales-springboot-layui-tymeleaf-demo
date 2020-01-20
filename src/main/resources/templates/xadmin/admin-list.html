@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html class="x-admin-sm">
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <title>欢迎页面-X-admin2.2</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <link rel="stylesheet" href="./css/font.css">
-        <link rel="stylesheet" href="./css/xadmin.css">
+        <link rel="stylesheet" type="text/css" href="./css/font.css">
+        <link rel="stylesheet" type="text/css" href="./css/xadmin.css">
         <script type="text/javascript" src="/webjars/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="./js/xadmin.js"></script>
         <!--[if lt IE 9]>
@@ -32,101 +32,91 @@
                         <div class="layui-card-body ">
                             <form class="layui-form layui-col-space5">
                                 <div class="layui-inline layui-show-xs-block">
-                                    <input class="layui-input"  autocomplete="off" placeholder="开始日" name="start" id="start">
+                                    <input class="layui-input" autocomplete="off" placeholder="开始日" name="startTime" id="startTime">
                                 </div>
                                 <div class="layui-inline layui-show-xs-block">
-                                    <input class="layui-input"  autocomplete="off" placeholder="截止日" name="end" id="end">
+                                    <input class="layui-input" autocomplete="off" placeholder="截止日" name="endTime" id="endTime">
                                 </div>
                                 <div class="layui-inline layui-show-xs-block">
-                                    <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                                    <input type="text" name="name"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
                                 </div>
                                 <div class="layui-inline layui-show-xs-block">
-                                    <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+                                    <button class="layui-btn"  lay-submit="" lay-filter="queryBtn"><i class="layui-icon">&#xe615;</i></button>
+                                    <button class="layui-btn"  type="reset"><i class="layui-icon">&#xe666;</i></button>
                                 </div>
                             </form>
                         </div>
                         <div class="layui-card-header">
                             <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                            <button class="layui-btn" onclick="xadmin.open('添加用户','./admin-add.html',800,400)"><i class="layui-icon"></i>添加</button>
-                            <button class="layui-btn" onclick="xadmin.open('批量添加用户','./admin-batch-add.html',800,400)"><i class="layui-icon"></i>批量添加</button>
+                            <a class="layui-btn" href='./admin-add.html'><i class="layui-icon"></i>添加</a>
+                            <button class="layui-btn" onclick="xadmin.open('批量添加用户','./admin-batch-add.html',800,400)"><i class="layui-icon"></i>批量添加</button>
                         </div>
                         <div class="layui-card-body ">
-                            <table class="layui-table layui-form">
-                              <thead>
-                                <tr>
-                                  <th>
-                                    <input type="checkbox" name=""  lay-skin="primary">
-                                  </th>
-                                  <th>ID</th>
-                                  <th>登录名</th>
-                                  <th>手机</th>
-                                  <th>邮箱</th>
-                                  <th>角色</th>
-                                  <th>加入时间</th>
-                                  <th>状态</th>
-                                  <th>操作</th>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td>
-                                    <input type="checkbox" name=""  lay-skin="primary">
-                                  </td>
-                                  <td>1</td>
-                                  <td>admin</td>
-                                  <td>18925139194</td>
-                                  <td>113664000@qq.com</td>
-                                  <td>超级管理员</td>
-                                  <td>2017-01-01 11:11:42</td>
-                                  <td class="td-status">
-                                    <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span></td>
-                                  <td class="td-manage">
-                                    <a onclick="member_stop(this,'10001')" href="javascript:;"  title="启用">
-                                      <i class="layui-icon">&#xe601;</i>
-                                    </a>
-                                    <a title="编辑"  onclick="xadmin.open('编辑','admin-edit.html')" href="javascript:;">
-                                      <i class="layui-icon">&#xe642;</i>
-                                    </a>
-                                    <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                                      <i class="layui-icon">&#xe640;</i>
-                                    </a>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
+                            <table class="layui-table layui-form" id="tableInfo"></table>
                         </div>
-                        <div class="layui-card-body ">
-                            <div class="page">
-                                <div>
-                                  <a class="prev" href="">&lt;&lt;</a>
-                                  <a class="num" href="">1</a>
-                                  <span class="current">2</span>
-                                  <a class="num" href="">3</a>
-                                  <a class="num" href="">489</a>
-                                  <a class="next" href="">&gt;&gt;</a>
-                                </div>
-                            </div>
-                        </div>
+                            <script type="text/html" id="operationBar" th:inline="none">
+                                <button class="layui-btn-normal layui-btn layui-btn-xs"><i class="layui-icon">&#xe642;</i></button>
+                                <button class="layui-btn-danger layui-btn layui-btn-xs"><i class="layui-icon">&#xe640;</i></button>
+	                        </script>
                     </div>
                 </div>
             </div>
         </div> 
     </body>
-    <script>
-      layui.use(['laydate','form'], function(){
+    <script th:inline="none">
+      layui.use(['laydate','form', 'table'], function(){
         var laydate = layui.laydate;
         var form = layui.form;
+        var table = layui.table;
         
-        //执行一个laydate实例
         laydate.render({
-          elem: '#start' //指定元素
+            elem: '#startTime'
         });
-
-        //执行一个laydate实例
+        
         laydate.render({
-          elem: '#end' //指定元素
+          elem: '#endTime'
+        });
+        
+        table.render({
+            elem: '#tableInfo'
+            ,url:'/user/list'
+            ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            ,page: true
+            ,cols: [[
+              {field:'userCode', width: 120, title: '用户编号', sort: true}
+              ,{field:'name', width: 100, title: '姓名'}
+              ,{field:'mobile', width: 120, title: '手机', sort: true}
+              ,{field:'email', width: 200, title: '邮箱'}
+              ,{field:'roles', width: 300, title: '角色', templet: function(data) {
+            	  var roleName = new Array();
+            	  $.each(data.roles, function(index, item) {
+            		  roleName.push(item.name);
+            	  });
+            	  
+                  return roleName.join(' , ');
+              }} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
+              ,{field:'status', title: '状态', width: 120, sort: true, templet: function(data) {
+            	  var statusName = ['停用', '启用', '已注销'];
+                  return statusName[data.status];
+              }}
+              ,{field:'gmtCreated', title: '创建时间', sort: true}
+              ,{field:'gmtModified', title: '更新时间', sort: true}
+              ,{fixed: 'right', title:'操作', align:'center', toolbar: '#operationBar', width:150}
+            ]]
+          });
+        
+        form.on('submit(queryBtn)', function (data) {
+        	table.reload('tableInfo', {
+                page: {
+                  curr: 1 //重新从第 1 页开始
+                }
+                ,where: data.field
+            });
+        	
+        	return false;
         });
       });
-
+        
        /*用户-停用*/
       function member_stop(obj,id){
           layer.confirm('确认要停用吗？',function(index){
@@ -160,10 +150,7 @@
           });
       }
 
-
-
       function delAll (argument) {
-
         var data = tableCheck.getData();
   
         layer.confirm('确认要删除吗？'+data,function(index){

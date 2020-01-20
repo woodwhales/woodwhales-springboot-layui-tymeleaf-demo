@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.2</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<link rel="stylesheet" href="/xadmin/css/font.css">
+<link rel="stylesheet" href="/xadmin/css/xadmin.css">
+<script type="text/javascript" src="/webjars/layui/layui.js"
+    charset="utf-8"></script>
+<script type="text/javascript" src="/xadmin/js/xadmin.js"></script>
+<script type="text/javascript" src="/xadmin/js/xm-select.js"></script>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space1">
+        <div class="layui-col-md15">
+            <div class="layui-card">
+                <div class="layui-card-header">搜索条件</div>
+                <div class="layui-card-body layui-form">
+                    <form>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">姓名</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="name" id="name" placeholder="请输入管理员姓名" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="layui-inline">
+                            <div class="layui-input-block">
+                                <input type='button' class="layui-btn layui-btn-sm" lay-submit lay-filter="queryBtn" value="查询" />
+                                <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm" lay-submit lay-filter="resetBtn">重置</button>
+                                <button class="layui-btn layui-btn-sm" id="addUserBtn">确定</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-card-header">搜索结果</div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="dataTable" lay-filter="dataTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="none">
+layui.use(['form', 'table'], function(){
+  var form = layui.form
+  ,$ = layui.$
+  ,table = layui.table
+  ,layer = layui.layer;
+  
+  //监听搜索
+  form.on('submit(queryBtn)', function () {
+      //执行重载
+      refreshPage();
+  });
+  
+  var checkedList = new Array();
+  var checkedUserNameList = new Array();
+  $(function() {
+        // 调用父页面中函数获取父页面中的数据
+        
+        var userCodeListFromParent = (parent.getUserCodeList() != '') ? parent.getUserCodeList().split(',') : [];
+        var userNameListFromParent = parent.getUserNameList().split(',');
+        if(userCodeListFromParent.length > 0){
+            for(var i=0; i < userCodeListFromParent.length;i++) {
+                checkedList[i] = userCodeListFromParent[i];
+                checkedUserNameList[i] = userNameListFromParent[i];
+            }
+        }
+
+        console.log('child -> checkedList', checkedList);
+        console.log('child -> checkedUserNameList', checkedUserNameList);
+
+ });
+  
+  table.render({
+      id: "dataTable"
+      , elem: '#dataTable'
+      , method: 'post'
+      , contentType : "application/json"
+      , url: '/user/listAllByPage'
+      , where: { name: ''}
+      , cols: [[
+          {type:'checkbox'}
+         ,{field: 'userCode', width: '180', title: '用户编号', sort: false} 
+         ,{field: 'name', width: '200', title: '姓名', sort: false}
+         ,{field: 'email', width: '180', title: '邮箱', sort: false}
+         ,{field: 'status', width: '100', title: '启用状态', sort: false, templet:function(data) {
+        	 if(data.status == 0) {
+                 return "超级管理员";
+             } else if(data.status == 1) {
+        		 return "系统管理员";
+        	 } else if(data.status == 2) {
+                 return "普通用户";
+             }
+         }}
+      ]]
+      , page: true
+      , done: function(res, curr, count){
+          if(res.data != undefined) {
+              for(var i=0;i<res.data.length;i++){
+                  for(var j=0;j<checkedList.length;j++){
+                      if(res.data[i].userCode ==checkedList[j]){
+                          //有效勾选
+                          res.data[i]["LAY_CHECKED"]=true;
+                          //找到对应数据改变勾选样式，呈现出选中效果
+                          var index= res.data[i]['LAY_TABLE_INDEX'];
+                          $('.layui-table tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+                          $('.layui-table tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+
+                          /* 禁用样式
+                          $(".layui-table tr[data-index="+index+"] input[type='checkbox']").prop('disabled',true);
+                          $(".layui-table tr[data-index="+index+"] input[type='checkbox']").next().addClass('layui-btn-disabled');*/
+                      }
+                  }
+              }
+          }
+          
+      }
+ });
+  
+  table.on('checkbox(dataTable)', function (obj) {
+      var type = obj.type;
+      var checked = obj.checked;
+      
+      if(type == 'one') {
+          var userCode = obj.data.userCode;
+          var name = obj.data.name;
+          if(checked) {
+              checkedList[checkedList.length] = userCode; 
+              checkedUserNameList[checkedUserNameList.length] = name; 
+          } else {
+              var index = $.inArray(userCode, checkedList);
+              if(index!=-1){
+                  checkedList.splice(index, 1);
+                  checkedUserNameList.splice(index, 1);
+              }
+          }
+      }
+
+      if(type == 'all') {
+          var currentPageData = table.cache['dataTable'];
+          console.log('currentPageData', currentPageData);
+          if(checked) {
+              for(var i=0; i< currentPageData.length;i++) {
+                  var _userCode = currentPageData[i].userCode;
+                  var _name = currentPageData[i].name;
+                  var _index = $.inArray(_userCode, checkedList);
+                  if(_index == -1){
+                      checkedList[checkedList.length] = _userCode;
+                      checkedUserNameList[checkedUserNameList.length] = _name; 
+                  }
+              }
+              
+          } else {
+              $.each(currentPageData, function(index, item) {
+                  var _index = $.inArray(item.userCode, checkedList);
+                  if(_index != -1){
+                      checkedList.splice(_index, 1);
+                      checkedUserNameList.splice(_index, 1);
+                  }
+              });
+          }
+      }
+      
+      
+  });
+  
+  //3.获取选中编号
+  $("#addUserBtn").on('click', function () {
+      parent.setUserCodeList(checkedList, checkedUserNameList);
+      
+      var index = parent.layer.getFrameIndex(window.name);
+      parent.layer.close(index);
+      
+  });
+
+  function refreshPage() {
+      table.reload('dataTable', {
+          where: {
+              "name":$.trim($("#name").val())
+          },page:{ cuur:1 }
+      });
+  }
+  
+});
+
+</script>
+
+</body>
+</html>
